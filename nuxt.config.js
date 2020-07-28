@@ -1,0 +1,338 @@
+require("dotenv").config()
+// Some helpful application constants.
+// TODO: Use these when rendering the pages (rather than just for head/meta tags...)
+export const options = {
+  name: "Wedoo API Tester",
+  shortDescription: "A free, fast and beautiful API request builder",
+  description:
+    "",
+  loading: {
+    color: "#202124",
+  },
+}
+// Sets the base path for the router.
+// Important for deploying to GitHub pages.
+// -- Travis includes the author in the repo slug,
+//    so if there's a /, we need to get everything after it.
+let repoName = (process.env.TRAVIS_REPO_SLUG || "").split("/").pop()
+export const routerBase =
+  process.env.DEPLOY_ENV === "GH_PAGES"
+    ? {
+        router: {
+          base: `/${repoName}/`,
+        },
+      }
+    : {
+        router: {
+          base: "/",
+        },
+      }
+export default {
+  mode: "spa",
+  /*
+   ** Headers of the page
+   */
+  server: {
+    host: "0.0.0.0", // default: localhost
+  },
+  head: {
+    title: `${options.name} • ${options.shortDescription}`,
+    meta: [
+      {
+        name: "keywords",
+        content:
+          "",
+      },
+      {
+        name: "X-UA-Compatible",
+        content: "IE=edge, chrome=1",
+      },
+      {
+        itemprop: "name",
+        content: `${options.name} • ${options.shortDescription}`,
+      },
+      {
+        itemprop: "description",
+        content: options.description,
+      },
+      {
+        itemprop: "image",
+        content: `https://postwoman.io/logo.jpg`,
+      },
+      {
+        property: "og:image",
+        content: `https://postwoman.io/logo.jpg`,
+      },
+      // Add to homescreen for Chrome on Android. Fallback for PWA (handled by nuxt)
+      {
+        name: "application-name",
+        content: options.name,
+      },
+      // Windows phone tile icon
+      {
+        name: "msapplication-TileImage",
+        content: `${routerBase.router.base}icons/icon-144x144.png`,
+      },
+      {
+        name: "msapplication-TileColor",
+        content: "#202124",
+      },
+      {
+        name: "msapplication-tap-highlight",
+        content: "no",
+      },
+    ],
+    link: [
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: `${routerBase.router.base}favicon.ico`,
+      },
+      // Home-screen icons (iOS)
+      {
+        rel: "apple-touch-icon",
+        href: `${routerBase.router.base}icons/icon-48x48.png`,
+      },
+      {
+        rel: "apple-touch-icon",
+        sizes: "72x72",
+        href: `${routerBase.router.base}icons/icon-72x72.png`,
+      },
+      {
+        rel: "apple-touch-icon",
+        sizes: "96x96",
+        href: `${routerBase.router.base}icons/icon-96x96.png`,
+      },
+      {
+        rel: "apple-touch-icon",
+        sizes: "144x144",
+        href: `${routerBase.router.base}icons/icon-144x144.png`,
+      },
+      {
+        rel: "apple-touch-icon",
+        sizes: "192x192",
+        href: `${routerBase.router.base}icons/icon-192x192.png`,
+      },
+    ],
+  },
+  /*
+   ** Customize the progress-bar color
+   */
+  loading: {
+    color: "var(--ac-color)",
+    continuous: true,
+  },
+  /*
+   ** Customize the loading indicator
+   */
+  loadingIndicator: {
+    name: "pulse",
+    color: "var(--ac-color)",
+    background: "#202124",
+  },
+  /*
+   ** Global CSS
+   */
+  css: ["~/assets/css/styles.scss", "~/assets/css/themes.scss", "~/assets/css/fonts.scss"],
+  /*
+   ** Plugins to load before mounting the App
+   */
+  plugins: [
+    {
+      src: "~/plugins/vuex-persist",
+    },
+    {
+      src: "~/plugins/v-tooltip",
+    },
+  ],
+  /*
+   ** Nuxt.js dev-modules
+   */
+  buildModules: [
+    // See https://goo.gl/OOhYW5
+    "@nuxtjs/pwa",
+    // Doc: https://github.com/nuxt-community/dotenv-module
+    "@nuxtjs/dotenv",
+    // Doc: https://github.com/nuxt-community/analytics-module
+    "@nuxtjs/google-analytics",
+    // Doc: https://github.com/nuxt-community/gtm-module
+    "@nuxtjs/gtm",
+  ],
+  /*
+   ** Nuxt.js modules
+   */
+  modules: [
+    // Doc: https://axios.nuxtjs.org/usage
+    "@nuxtjs/axios",
+    // https://github.com/nuxt-community/modules/tree/master/packages/toast
+    "@nuxtjs/toast",
+    // Doc: https://github.com/nuxt-community/nuxt-i18n
+    "nuxt-i18n",
+    // Doc: https://github.com/nuxt-community/sitemap-module
+    "@nuxtjs/sitemap",
+    // Doc: https://github.com/nuxt-community/robots-module
+    "@nuxtjs/robots",
+  ],
+  pwa: {
+    manifest: {
+      name: options.name,
+      short_name: options.name,
+      start_url: `${routerBase.router.base}`,
+      display: "standalone",
+      background_color: "#202124",
+      description: options.shortDescription,
+      theme_color: "#202124",
+    },
+
+    meta: {
+      ogHost: "https://postwoman.io",
+      twitterCard: "summary_large_image",
+      twitterSite: "@liyasthomas",
+      twitterCreator: "@liyasthomas",
+      description: options.shortDescription,
+      theme_color: "#202124",
+    },
+  },
+  toast: {
+    position: "bottom-center",
+    duration: 3000,
+    theme: "bubble",
+    keepOnHover: true,
+  },
+  googleAnalytics: {
+    id: process.env.GA_ID || "UA-61422507-2",
+  },
+  gtm: {
+    id: process.env.GTM_ID || "GTM-MXWD8NQ",
+  },
+  sitemap: {
+    hostname: "",
+  },
+  robots: {
+    UserAgent: "*",
+    Disallow: "",
+    Allow: "/",
+    Sitemap: "",
+  },
+  env: {
+    API_KEY: process.env.API_KEY,
+    AUTH_DOMAIN: process.env.AUTH_DOMAIN,
+    DATABASE_URL: process.env.DATABASE_URL,
+    PROJECT_ID: process.env.PROJECT_ID,
+    STORAGE_BUCKET: process.env.STORAGE_BUCKET,
+    MESSAGING_SENDER_ID: process.env.MESSAGING_SENDER_ID,
+    APP_ID: process.env.APP_ID,
+    MEASUREMENT_ID: process.env.MEASUREMENT_ID,
+  },
+  i18n: {
+    locales: [
+      {
+        code: "en",
+        name: "English",
+        iso: "en-US",
+        file: "en-US.json",
+      },
+      {
+        code: "es",
+        name: "Español",
+        iso: "es-ES",
+        file: "es-ES.json",
+      },
+      {
+        code: "fr",
+        name: "Français",
+        iso: "fr-FR",
+        file: "fr-FR.json",
+      },
+      {
+        code: "fa",
+        name: "Farsi",
+        iso: "fa-IR",
+        file: "fa-IR.json",
+      },
+      {
+        code: "pt",
+        name: "Português",
+        iso: "pt-PT",
+        file: "pt-PT.json",
+      },
+      {
+        code: "pt-br",
+        name: "Português Brasileiro",
+        iso: "pt-BR",
+        file: "pt-BR.json",
+      },
+      {
+        code: "cn",
+        name: "简体中文",
+        iso: "zh-CN",
+        file: "zh-CN.json",
+      },
+      {
+        code: "tw",
+        name: "繁體中文",
+        iso: "zh-TW",
+        file: "zh-TW.json",
+      },
+      {
+        code: "id",
+        name: "Bahasa Indonesia",
+        iso: "id-ID",
+        file: "id-ID.json",
+      },
+      {
+        code: "tr",
+        name: "Türkçe",
+        iso: "tr-TR",
+        file: "tr-TR.json",
+      },
+      {
+        code: "de",
+        name: "Deutsch",
+        iso: "de-DE",
+        file: "de-DE.json",
+      },
+      {
+        code: "ja",
+        name: "日本語",
+        iso: "ja-JP",
+        file: "ja-JP.json",
+      },
+      {
+        code: "ko",
+        name: "한국어",
+        iso: "ko-KR",
+        file: "ko-KR.json",
+      },
+    ],
+    defaultLocale: "en",
+    vueI18n: {
+      fallbackLocale: "en",
+    },
+    lazy: true,
+    langDir: "lang/",
+  },
+  /*
+   ** Build configuration
+   */
+  build: {
+    /*
+     ** You can extend webpack config here
+     */
+    extend(config, ctx) {
+      config.node = {
+        fs: "empty",
+      }
+    },
+  },
+  /*
+   ** Generate configuration
+   */
+  generate: {
+    fallback: true,
+  },
+  /*
+   ** Router configuration
+   */
+  ...routerBase,
+}
