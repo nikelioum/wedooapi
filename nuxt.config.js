@@ -206,7 +206,7 @@ export default {
     id: process.env.GTM_ID || "GTM-MXWD8NQ",
   },
   sitemap: {
-    hostname: "",
+    generate: true,
   },
   robots: {
     UserAgent: "*",
